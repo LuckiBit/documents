@@ -214,9 +214,13 @@ git clean -fdx
   git switch -c v3.x
   ```
 
-- 允许对齐版本：
+- 允许对齐版本（将 `main` 分支指针强制对齐到特定节点，使得切换到 `main` 时内容与该节点完全一致）：
   ```bash
+  # 对齐到指定版本
   git branch -f main v2.2.3
+  
+  # 对齐到当前所在节点（例如当前在 v2.x 分支某节点，执行后 main 分支即指向该节点）
+  git branch -f main
   ```
 
 ### 4.10 `main` 分支禁止行为
