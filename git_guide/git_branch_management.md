@@ -498,6 +498,9 @@ git diff
 # 查看本地分支列表
 git branch
 
+# 查看全部分支列表（包括本地和远程）
+git branch -a
+
 # 以图形化单行显示所有分支的提交历史
 git log --graph --oneline --decorate --all
 ```
