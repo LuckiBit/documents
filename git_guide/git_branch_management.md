@@ -154,16 +154,31 @@ MAJOR.MINOR.PATCH
 
 ### 4.3 初始化
 
+初始化本地仓库并修改默认分支为 `main`：
+
 ```bash
 git init
 git branch -m master main
 ```
 
+提交初始空记录（作为后续分支派生的基准点，新仓库必须有至少一次提交才能派生分支）：
+
+```bash
+git commit --allow-empty -m "chore: initial commit"
+```
+
 ### 4.4 创建维护线
+
+从 `main` 分支派生出长期维护分支 `v1.x`：
 
 ```bash
 git switch main
 git switch -c v1.x
+```
+
+提交并发布维护线初始版本：
+
+```bash
 git add .
 git commit -m "feat: init v1"
 git tag v1.0.0
@@ -171,13 +186,36 @@ git tag v1.0.0
 
 ### 4.5 Feature 生命周期
 
+创建：
+
 ```bash
 git switch v1.x
 git switch -c feature/login
-git commit -m "feat: login"
+```
+
+开发：
+
+```bash
+git add .
+git commit -m "feat: add login"
+```
+
+合并：
+
+```bash
 git switch v1.x
 git merge --no-ff feature/login
+```
+
+删除：
+
+```bash
 git branch -d feature/login
+```
+
+发布：
+
+```bash
 git tag v1.1.0
 ```
 
@@ -214,12 +252,15 @@ git clean -fdx
   git switch -c v3.x
   ```
 
-- 允许对齐版本（将 `main` 分支指针强制对齐到特定节点，使得切换到 `main` 时内容与该节点完全一致）：
+- 允许对齐版本（可在非 `main` 分支下直接执行，无需切换）：
   ```bash
-  # 对齐到指定版本
+  # 对齐到指定 Tag
   git branch -f main v2.2.3
   
-  # 对齐到当前所在节点（例如当前在 v2.x 分支某节点，执行后 main 分支即指向该节点）
+  # 或对齐到指定 Commit 节点
+  git branch -f main c88094e
+
+  # 如果不带目标参数，则默认对齐到当前所在的节点 (HEAD)
   git branch -f main
   ```
 
@@ -234,10 +275,22 @@ git clean -fdx
 切换到历史版本：
 
 ```bash
+# 切换到指定 Tag
 git switch --detach v2.1.0
+
+# 或切换到指定 Commit 节点
+git switch --detach c88094e
 ```
 
 切换后必须保证工作区与目标版本的一致性，按照清理原则对工作区进行清理，避免旧产物污染。
+
+完成历史版本的工作后，同样需要按照项目约定恢复工作区干净状态。
+
+恢复当前维护线或主干继续工作：
+
+```bash
+git switch v2.x  # 或 git switch main
+```
 
 ### 4.12 远程拉取与推送规范
 
@@ -319,9 +372,10 @@ git switch --detach v2.1.0
 
 ### 5.3 初始化
 
-如果默认分支为 `master`，修改为 `main`：
+初始化本地仓库并修改默认分支为 `main`：
 
 ```bash
+git init
 git branch -m master main
 ```
 
@@ -373,7 +427,11 @@ git tag v1.1.0
 切换到历史版本：
 
 ```bash
+# 切换到指定 Tag
 git switch --detach v1.0.0
+
+# 或切换到指定 Commit 节点
+git switch --detach c88094e
 ```
 
 完成历史版本的工作后，按照项目约定恢复工作区干净状态。
@@ -481,8 +539,16 @@ git clone <仓库地址>
 # 重命名当前分支为 main
 git branch -m master main
 
-# 管理远程仓库地址关联
+# 修改默认编辑器为 nvim
+git config --global core.editor "nvim"
+
+# 管理远程仓库地址关联（添加）
 git remote add origin <远程仓库地址>
+
+# 修改远程仓库地址（更换地址）
+git remote set-url origin <新的远程仓库地址>
+
+# 查看当前关联的远程仓库信息
 git remote -v
 ```
 
@@ -564,11 +630,15 @@ git tag
 # 在当前提交上创建 Tag
 git tag v1.0.0
 
+# 在指定 Commit 节点上创建 Tag
+git tag v1.0.0 c88094e
+
 # 查看指定 Tag 的详细提交信息
 git show v1.0.0
 
-# 切换到历史 Tag（进入 Detached HEAD 状态）
+# 切换到历史 Tag 或指定 Commit 节点（进入 Detached HEAD 状态）
 git switch --detach v1.0.0
+# git switch --detach c88094e
 ```
 
 ### 7.6 工作区清理、暂存与撤销
@@ -588,6 +658,23 @@ git stash pop
 
 # 撤销工作区某个文件的改动（恢复至最后一次提交状态）
 git restore <文件路径>
+```
+
+### 7.7 修改提交与历史重写
+
+```bash
+# 修改最后一次提交（更新提交信息或将暂存区的改动合并到最后一次提交）
+git commit --amend
+
+# 交互式修改历史指定提交（可用于修改历史提交内容、合并提交、修改提交信息等）
+# 1. 找到需要修改的提交的上一个 <commit-id>，执行：
+git rebase -i <commit-id>
+# 2. 在弹出的编辑器中，将需要修改的提交前的 "pick" 改为 "edit" (或 "e")，保存退出
+# 3. 此时 rebase 会在指定提交处暂停，您可以修改文件、git add 暂存
+# 4. 提交您的修改：
+git commit --amend
+# 5. 继续完成 rebase 流程：
+git rebase --continue
 ```
 
 ## 8 总结与执行口令

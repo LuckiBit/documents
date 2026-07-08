@@ -6,6 +6,7 @@
 
 ```bash
 git init
+git branch -M main
 
 git config --local user.name "lucki"
 git config --local user.email "lucki@example.com"
@@ -390,7 +391,7 @@ B ──────── C (main, tag: v3.0.0)
 
 ```bash
 # 切换到旧版本标签
-git checkout v1.0.0
+git switch --detach v1.0.0
 
 # 验证或部署完成后，切回 main 分支
 git switch main
