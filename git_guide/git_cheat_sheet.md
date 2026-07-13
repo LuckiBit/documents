@@ -610,6 +610,56 @@
   git cherry-pick <commit>
   ```
 
+- **使用 `reset` 强制覆盖当前分支 (overwrite branch)：**
+
+  ```text
+  Before:
+        D---E---F (banana)
+       /
+  A---B---C---G (main)
+
+  After:
+        D---E---F (main, banana)
+       /
+  A---B---C---G (abandoned)
+  ```
+
+  ```bash
+  git switch main
+  ```
+
+  ```bash
+  git reset --hard banana
+  ```
+
+- **保持线性历史的完整工作流 (Rebase, Merge, Delete & Push)：**
+
+  ```text
+  Before:
+        D---E---F (banana)
+       /
+  A---B---C---G (main, origin/main)
+
+  After:
+  A---B---C---G---D'---E'---F' (main, origin/main)
+  ```
+
+  ```bash
+  # 1. 确保子分支基于 main 的最新提交
+  git switch banana
+  git rebase main
+
+  # 2. 切换回 main 并执行快进合并
+  git switch main
+  git merge banana
+
+  # 3. 删除临时分支
+  git branch -d banana
+
+  # 4. 推送到远程仓库
+  git push origin main
+  ```
+
 ## 12 恢复文件状态 (Restore Files)
 
 > [!NOTE]
