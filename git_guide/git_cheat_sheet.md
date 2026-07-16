@@ -990,6 +990,7 @@
   ```bash
   git config --global alias.st status
   git config --global alias.lg "log --oneline --graph --decorate"
+  git config --global alias.lg 'log --graph --decorate --all --pretty=format:"%C(auto)%h%d%Creset %Cgreen%ad%Creset %Cblue%an%Creset %s" --date=short'
   ```
 
 ## 18 重要文件 (Important Files)
