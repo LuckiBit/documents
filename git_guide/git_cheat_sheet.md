@@ -240,6 +240,12 @@
   git branch -D <branch>
   ```
 
+- **删除远程分支：**
+
+  ```bash
+  git push origin --delete <branch>
+  ```
+
 ### 基础切换 (Basic Switch)
 
 - **切换到已有分支：**
@@ -544,6 +550,18 @@
 
   ```bash
   git merge banana
+  ```
+
+- **仅允许快进合并（无法快进时中止）：**
+
+  ```bash
+  git merge --ff-only <branch>
+  ```
+
+- **创建合并提交（即使可以快进）：**
+
+  ```bash
+  git merge --no-ff <branch>
   ```
 
 - **使用 `squash merge` 压缩合并：**
