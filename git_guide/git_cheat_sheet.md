@@ -662,21 +662,31 @@
   A---B---C---G---D'---E'---F' (main, origin/main)
   ```
 
-  ```bash
-  # 1. 确保子分支基于 main 的最新提交
-  git switch banana
-  git rebase main
+  - 确保子分支基于 main 的最新提交：
 
-  # 2. 切换回 main 并执行快进合并
-  git switch main
-  git merge banana
+    ```bash
+    git switch banana
+    git rebase main
+    ```
 
-  # 3. 删除临时分支
-  git branch -d banana
+  - 切换回 main 并执行快进合并：
 
-  # 4. 推送到远程仓库
-  git push origin main
-  ```
+    ```bash
+    git switch main
+    git merge banana
+    ```
+
+  - 删除临时分支：
+
+    ```bash
+    git branch -d banana
+    ```
+
+  - 推送到远程仓库：
+
+    ```bash
+    git push origin main
+    ```
 
 ## 12 恢复文件状态 (Restore Files)
 
