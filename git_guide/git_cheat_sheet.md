@@ -6,7 +6,7 @@
 ┌──────────────────────┐
 │        Stash         │
 └──────────────────────┘
- git stash pop ▲     │ git stash push
+git stash push ▲     │ git stash pop
                │     ▼
 ┌──────────────────────┐ 
 │      Workspace       │◀───────────────── git pull
